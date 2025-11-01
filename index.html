@@ -124,17 +124,33 @@
   </audio>
 
   <script>
-    // ======== MÚSICA ========
+        // ========== MÚSICA “PARABÉNS PRA VOCÊ” ==========
     const playBtn = document.getElementById('play-btn');
-    const song = document.getElementById('song');
+    let audioCtx = null;
+
+    const notes = [
+      264, 264, 297, 264, 352, 330, // Parabéns pra você
+      264, 264, 297, 264, 396, 352, // Nesta data querida
+      264, 264, 528, 440, 352, 330, 297, // Muitas felicidades
+      466, 466, 440, 352, 396, 352 // Muitos anos de vida
+    ];
+
     playBtn.addEventListener('click', async () => {
-      try {
-        await song.play();
-        playBtn.textContent = "🎶 Tocando...";
-        playBtn.disabled = true;
-      } catch (err) {
-        alert("Toque no botão novamente para permitir o som 🎵");
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      let time = audioCtx.currentTime;
+      notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, time);
+        gain.gain.setValueAtTime(0.15, time);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(time);
+        osc.stop(time + 0.4);
+        time += 0.45;
+      });
     });
 
     // ======== CONFETTI ========
