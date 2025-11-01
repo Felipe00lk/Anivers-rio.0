@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -115,20 +115,29 @@
   <div class="emoji">🎂</div>
 
   <div class="footer">
-    <p>Feito com carinho 💖<br>Do seu colega Felipe 💌</p>
+    <p>Feito com carinho 💖<br>Do seu colega Felipe 💌, se tiver bolo, eu quero 😃</p>
   </div>
 
-  <audio id="song" src="https://cdn.pixabay.com/download/audio/2023/03/23/audio_c3a17bfbf4.mp3?filename=parabens-pra-voce-139307.mp3"></audio>
+  <!-- 🎶 Áudio hospedado no Pixabay -->
+  <audio id="song" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2023/03/23/audio_c3a17bfbf4.mp3?filename=parabens-pra-voce-139307.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
-    // ========== MÚSICA ==========
+    // ======== MÚSICA ========
     const playBtn = document.getElementById('play-btn');
     const song = document.getElementById('song');
-    playBtn.addEventListener('click', () => {
-      song.play();
+    playBtn.addEventListener('click', async () => {
+      try {
+        await song.play();
+        playBtn.textContent = "🎶 Tocando...";
+        playBtn.disabled = true;
+      } catch (err) {
+        alert("Toque no botão novamente para permitir o som 🎵");
+      }
     });
 
-    // ========== CONFETTI ==========
+    // ======== CONFETTI ========
     const canvas = document.getElementById('confetti');
     const ctx = canvas.getContext('2d');
     let W = canvas.width = window.innerWidth;
